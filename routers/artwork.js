@@ -30,3 +30,23 @@ router.get("/:id", async (request, response, next) => {
   }
 });
 module.exports = router;
+
+// edit hearts
+router.put("/hearts/:id", async (req, res, next) => {
+  const id = req.params.id;
+  const artwork = await Artwork.findByPk(id);
+  const { hearts } = req.body;
+  //   console.log("hearts from backend: ", hearts);
+  const newHeart = await artwork.update({ hearts });
+
+  return res.status(200).send(newHeart);
+});
+
+// // post new bid with id of user
+// router.post("/:id/bids", authMiddleware, async (req,res,next) => {
+//     try {
+
+//     } catch {
+//         next(e)
+//     }
+// })
