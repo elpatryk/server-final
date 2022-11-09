@@ -9,7 +9,7 @@ router.get("/", async (request, response, next) => {
   try {
     const artworks = await Artwork.findAll({ include: { model: Bid } });
     response.send(artworks);
-    console.log(artworks);
+    // console.log(artworks);
   } catch (e) {
     console.log(e);
     next(e);
@@ -23,7 +23,8 @@ router.get("/:id", async (request, response, next) => {
     const artDetails = await Artwork.findByPk(artworkId, {
       include: { model: Bid },
     });
-    console.log(artDetails);
+    response.send(artDetails);
+    // console.log(artDetails);
   } catch (e) {
     next(e);
   }
