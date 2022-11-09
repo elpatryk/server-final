@@ -15,4 +15,17 @@ router.get("/", async (request, response, next) => {
     next(e);
   }
 });
+
+//get specific artwork
+router.get("/:id", async (request, response, next) => {
+  try {
+    const artworkId = request.params.id;
+    const artDetails = await Artwork.findByPk(artworkId, {
+      include: { model: Bid },
+    });
+    console.log(artDetails);
+  } catch (e) {
+    next(e);
+  }
+});
 module.exports = router;
