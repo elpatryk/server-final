@@ -42,11 +42,23 @@ router.put("/hearts/:id", async (req, res, next) => {
   return res.status(200).send(newHeart);
 });
 
-// // post new bid with id of user
-// router.post("/:id/bids", authMiddleware, async (req,res,next) => {
-//     try {
+// post new bid with id of artwork
+router.post("/:id/bids", authMiddleware, async (req, res, next) => {
+  try {
+    const artwork = await Artwork.findByPk(req.params.id);
 
-//     } catch {
-//         next(e)
-//     }
-// })
+    // console.log("backend post bid", artwork);
+    const { amount, email } = req.body;
+
+    const bid = await Bid.create({
+      amount,
+      email,
+      artworkId: artwork.id,
+    });
+    console.log("req user", req.user);
+    console.log("amount and email: ", amount, email);
+    return res.status(201).send({ message: "New bid!", bid });
+  } catch (e) {
+    next(e);
+  }
+});
