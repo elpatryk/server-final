@@ -87,3 +87,22 @@ router.post("/auction", authMiddleware, async (req, res, next) => {
     console.log(e);
   }
 });
+
+router.delete("/auction/:id", authMiddleware, async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    // const bid = await Bid.findAll({ where: { artworkId: id } });
+    // console.log("bid artworkId", bid);
+    // await bid.destroy({
+    //   include: { model: Artwork },
+    //   where: { artworkId: id },
+    // });
+
+    const artwork = await Artwork.findByPk(id);
+    await artwork.destroy();
+    // console.log("artwork ", artwork.dataValues);
+    res.send({ id });
+  } catch (e) {
+    next(e.message);
+  }
+});
