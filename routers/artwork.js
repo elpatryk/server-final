@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const auth = require("../auth/middleware");
 const authMiddleware = require("../auth/middleware");
 const router = new Router();
 const Artwork = require("../models/").artwork;
@@ -46,7 +47,7 @@ router.put("/hearts/:id", async (req, res, next) => {
 router.post("/:id/bids", authMiddleware, async (req, res, next) => {
   try {
     const artwork = await Artwork.findByPk(req.params.id);
-
+    const { id } = req.user;
     // console.log("backend post bid", artwork);
     const { amount, email, artworkId } = req.body;
 
@@ -55,10 +56,34 @@ router.post("/:id/bids", authMiddleware, async (req, res, next) => {
       email,
       artworkId,
     });
-    // console.log("req user", req.user);
-    console.log("amount artworkId and email: ", amount, artwork, email);
+
+    // console.log("amount artworkId and email: ", amount, artwork, email);
     return res.status(201).send({ message: "New bid!", bid });
   } catch (e) {
     next(e);
+  }
+});
+
+router.post("/auction", authMiddleware, async (req, res, next) => {
+  try {
+    const { id, isArtist } = req.user;
+    const { title, imageUrl, minimumBid } = req.body;
+    // console.log(id);
+
+    const artwork = await Artwork.create({
+      title,
+      imageUrl,
+      minimumBid,
+      userId: id,
+      hearts: 0,
+    });
+    if (!isArtist) {
+      return res
+        .status(400)
+        .send({ message: "Only artist can upload new artwork" });
+    }
+    return res.status(201).send({ message: "New artwork posted!", artwork });
+  } catch (e) {
+    console.log(e);
   }
 });
