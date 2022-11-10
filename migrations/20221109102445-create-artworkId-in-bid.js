@@ -9,8 +9,6 @@ module.exports = {
         model: "artworks",
         key: "id",
       },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
     });
   },
 
