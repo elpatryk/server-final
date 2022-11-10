@@ -48,15 +48,15 @@ router.post("/:id/bids", authMiddleware, async (req, res, next) => {
     const artwork = await Artwork.findByPk(req.params.id);
 
     // console.log("backend post bid", artwork);
-    const { amount, email } = req.body;
+    const { amount, email, artworkId } = req.body;
 
     const bid = await Bid.create({
       amount,
       email,
-      artworkId: artwork.id,
+      artworkId,
     });
-    console.log("req user", req.user);
-    console.log("amount and email: ", amount, email);
+    // console.log("req user", req.user);
+    console.log("amount artworkId and email: ", amount, artwork, email);
     return res.status(201).send({ message: "New bid!", bid });
   } catch (e) {
     next(e);
