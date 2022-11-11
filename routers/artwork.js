@@ -23,6 +23,7 @@ router.get("/:id", async (request, response, next) => {
     const artworkId = request.params.id;
     const artDetails = await Artwork.findByPk(artworkId, {
       include: { model: Bid },
+      order: [[`bids`, `amount`, `DESC`]],
     });
     response.send(artDetails);
     // console.log(artDetails);
@@ -96,10 +97,11 @@ router.delete("/auction/:id", authMiddleware, async (req, res, next) => {
     if (!isArtist) {
       return res.status(400);
     }
+
     const artwork = await Artwork.findByPk(id);
     await artwork.destroy();
 
-    res.send({ id });
+    res.send(id);
   } catch (e) {
     next(e.message);
   }

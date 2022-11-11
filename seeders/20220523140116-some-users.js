@@ -13,7 +13,7 @@ module.exports = {
           password: bcrypt.hashSync("apple", 10),
           createdAt: new Date(),
           updatedAt: new Date(),
-          isArtist: false,
+          isArtist: true,
         },
         {
           name: "Banana",
